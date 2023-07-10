@@ -2,6 +2,9 @@
   "name": "raft-prisma",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "author": "Irvan Rizki Nugraha <irvanriskinugraha90@gmail.com>",
   "license": "MIT",
   "prisma": {
