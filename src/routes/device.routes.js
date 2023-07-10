@@ -7,4 +7,6 @@ router.get('/', deviceController.index);
 
 router.post('/', deviceController.create);
 
+router.delete('/:id', deviceController.destroy);
+
 module.exports = router;

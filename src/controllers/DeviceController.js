@@ -1,3 +1,4 @@
+const CustomError = require("../utils/CustomError");
 const Controller = require("./Controller");
 
 class DeviceController extends Controller {
@@ -35,6 +36,30 @@ class DeviceController extends Controller {
         200,
         'device created successfully',
         device,
+      )
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  destroy = async (req, res, next) => {
+    const { id } = req.params;
+  
+    try {
+      const device = await this.prisma.device.findUnique({
+        where: { id },
+      })
+
+      if (!device) throw new CustomError('device not found', 404);
+
+      const result = await this.prisma.device.delete({
+        where: { id },
+      })
+      return this.sendResponse(
+        res,
+        204,
+        'device deleted successfully',
+        null,
       )
     } catch (error) {
       next(error);
