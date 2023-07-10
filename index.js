@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 
 const deviceRoutes = require('./src/routes/device.routes');
+const ErrorHandler = require('./src/utils/ErrorHandler');
 
 app.use(cors());
 
@@ -19,6 +20,8 @@ app.get('/', (req, res) => {
 })
 
 app.use('/devices', deviceRoutes);
+
+app.use(ErrorHandler.handleError);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
