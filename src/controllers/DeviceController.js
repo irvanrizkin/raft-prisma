@@ -1,3 +1,4 @@
+const mqttInstance = require("../services/MqttSingleton");
 const CustomError = require("../utils/CustomError");
 const Controller = require("./Controller");
 
@@ -31,6 +32,7 @@ class DeviceController extends Controller {
           id, name, thingerUrl, thingerBearer
         },
       });
+      mqttInstance.subscribeAll();
       return this.sendResponse(
         res,
         200,
@@ -55,6 +57,7 @@ class DeviceController extends Controller {
       const result = await this.prisma.device.delete({
         where: { id },
       })
+      mqttInstance.subscribeAll();
       return this.sendResponse(
         res,
         204,

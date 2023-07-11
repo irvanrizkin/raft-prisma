@@ -25,6 +25,7 @@ model Measurement {
   ppm           Int       @db.Int
   temperature   Decimal   @db.Decimal(5, 2)
   source        String    @db.VarChar(30)
+  createdAt     DateTime  @default(now())
   device        Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
   deviceId      String
 

@@ -6,6 +6,7 @@ const app = express();
 const deviceRoutes = require('./src/routes/device.routes');
 const measurementController = require('./src/routes/measurement.routes');
 const ErrorHandler = require('./src/utils/ErrorHandler');
+const mqttInstance = require('./src/services/MqttSingleton');
 
 app.use(cors());
 
