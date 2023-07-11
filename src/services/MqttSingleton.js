@@ -27,8 +27,8 @@ class MqttSingleton {
 
   addMeasurement = async (topic, message) => {
     try {
-      const { ppm, temperature, source } = JSON.parse(message.toString());
       if (topic.includes('/tdstemp')) {
+        const { ppm, temperature, source } = JSON.parse(message.toString());
         const [deviceId] = topic.split('/');
 
         const device = await this.prisma.measurement.create({
