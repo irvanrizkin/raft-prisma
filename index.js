@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 
 const deviceRoutes = require('./src/routes/device.routes');
+const measurementController = require('./src/routes/measurement.routes');
 const ErrorHandler = require('./src/utils/ErrorHandler');
 
 app.use(cors());
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/devices', deviceRoutes);
+app.use('/measurements', measurementController);
 
 app.use(ErrorHandler.handleError);
 

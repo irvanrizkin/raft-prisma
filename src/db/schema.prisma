@@ -17,4 +17,16 @@ model Device {
   thingerUrl    String    @db.Text
   thingerBearer String    @db.Text
   createdAt     DateTime  @default(now())
+  measurements  Measurement[]
+}
+
+model Measurement {
+  id            Int       @default(autoincrement()) @id
+  ppm           Int       @db.Int
+  temperature   Decimal   @db.Decimal(5, 2)
+  source        String    @db.VarChar(30)
+  device        Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  deviceId      String
+
+  @@index([deviceId])
 }
