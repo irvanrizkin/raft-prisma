@@ -5,6 +5,7 @@ const app = express();
 
 const deviceRoutes = require('./src/routes/device.routes');
 const measurementController = require('./src/routes/measurement.routes');
+const actionController = require('./src/routes/action.routes');
 const ErrorHandler = require('./src/utils/ErrorHandler');
 const mqttInstance = require('./src/services/MqttSingleton');
 
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 
 app.use('/devices', deviceRoutes);
 app.use('/measurements', measurementController);
+app.use('/actions', actionController)
 
 app.use(ErrorHandler.handleError);
 
