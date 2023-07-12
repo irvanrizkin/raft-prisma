@@ -1,3 +1,4 @@
+const { sub } = require("date-fns");
 const CustomError = require("../utils/CustomError");
 const Controller = require("./Controller");
 
@@ -12,14 +13,82 @@ class MeasurementController extends Controller {
     try {
       const measurements = await this.prisma.measurement.findMany({
         where: {
-          deviceId
+          deviceId,
+          createdAt: {
+            gte: sub(new Date(), { hours: 1 }),
+            lte: new Date(),
+          }
+        },
+        orderBy: {
+          createdAt: 'asc',
         }
       });
       return this.sendResponse(
         res,
         200,
-        'measurement retrieved successfully',
+        'measurement from last two hours retrieved successfully',
         measurements,
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  getDailyAverageByDevice = async (req, res, next) => {
+    const { id: deviceId } = req.params;
+    
+    try {
+      const measurement = await this.prisma.$queryRaw`
+        SELECT
+            AVG(ppm) AS ppm,
+            HOUR(createdAt) AS hour
+        FROM
+            Measurement
+        WHERE
+            deviceId = ${deviceId}
+            AND createdAt >= DATE_SUB(NOW(), INTERVAL 1 DAY)
+        GROUP BY
+            HOUR(createdAt)
+        ORDER BY
+            HOUR(createdAt);
+      `
+      return this.sendResponse(
+        res,
+        200,
+        'measurement averaged from last one day retrieved successfully',
+        measurement,
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  getWeeklyAverageByDevice = async (req, res, next) => {
+    const { id: deviceId } = req.params;
+    
+    try {
+      const measurement = await this.prisma.$queryRaw`
+        SELECT
+            AVG(ppm) AS ppm,
+            HOUR(createdAt) AS hour,
+            DAY(createdAt) AS day
+        FROM
+            Measurement
+        WHERE
+            deviceId = ${deviceId}
+            AND createdAt >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+        GROUP BY
+            HOUR(createdAt),
+            DAY(createdAt)
+        ORDER BY
+            DAY(createdAt),
+            HOUR(createdAt);
+      `
+      return this.sendResponse(
+        res,
+        200,
+        'measurement averaged from last one week retrieved successfully',
+        measurement,
       );
     } catch (error) {
       next(error);
