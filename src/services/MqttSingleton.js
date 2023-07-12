@@ -33,7 +33,7 @@ class MqttSingleton {
 
         const device = await this.prisma.measurement.create({
           data: {
-            ppm,
+            ppm: ppm | 0,
             temperature,
             deviceId,
             source,

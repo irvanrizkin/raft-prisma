@@ -109,7 +109,10 @@ class MeasurementController extends Controller {
 
       const measurement = await this.prisma.measurement.create({
         data: {
-          ppm, temperature, source, deviceId
+          ppm: ppm | 0,
+          temperature,
+          source,
+          deviceId,
         }
       })
       return this.sendResponse(
