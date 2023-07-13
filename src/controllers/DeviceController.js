@@ -9,7 +9,11 @@ class DeviceController extends Controller {
 
  index = async (req, res, next) => {
   try {
-    const devices = await this.prisma.device.findMany();
+    const devices = await this.prisma.device.findMany({
+      orderBy: {
+        name: 'asc',
+      }
+    });
     return this.sendResponse(
       res,
       200,
